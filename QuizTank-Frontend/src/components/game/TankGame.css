@@ -1,0 +1,537 @@
+:root {
+    --main: #48ACFF;
+    --main-dark: #2b9ae6;
+    --bg-1: #ffffff;
+    --bg-2: #f0f8ff;
+    --panel: rgba(255, 255, 255, 0.92);
+    --muted: #64748b;
+    --text: #0b1220;
+    --accent-success: #10b981;
+    --accent-warn: #f59e0b;
+    --accent-error: #ef4444;
+}
+
+.tank-game-container {
+    display: grid;
+    place-items: center;
+    gap: 8px;
+    padding: 12px;
+    height: 100vh;
+    background: #F9FAFB;
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.tank-game-container canvas {
+    background: linear-gradient(45deg, #f8fbff 0%, #eef6fb 100%);
+    border: 3px solid rgba(72, 172, 255, 0.22);
+    image-rendering: pixelated;
+    border-radius: 8px;
+    box-shadow:
+        0 6px 20px rgba(72, 172, 255, 0.12),
+        inset 0 0 16px rgba(0, 0, 0, .03);
+    max-width: 100vw;
+    max-height: 80vh;
+}
+
+.tank-game-container canvas:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.hud {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: var(--panel);
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(11, 18, 32, 0.06);
+    backdrop-filter: blur(6px);
+    color: var(--text);
+    box-shadow: 0 6px 18px rgba(11, 18, 32, 0.04);
+}
+
+.pill {
+    background: linear-gradient(135deg, #ffffff 0%, #f6fbff 100%);
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(11, 18, 32, 0.04);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+}
+
+.health-bar {
+    background: #eef2f7;
+    height: 8px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 6px;
+    border: 1px solid rgba(11, 18, 32, 0.04);
+    width: 100%;
+}
+
+.health-fill {
+    background: linear-gradient(90deg, var(--accent-success), #22c55e);
+    height: 100%;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.12);
+}
+
+/* Modal Styles injected by JS, but we can define base classes if needed */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.06);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-family: 'Nunito', sans-serif;
+}
+
+.modal-box {
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, #f3fbff 100%);
+    border: 2px solid var(--main);
+    border-radius: 12px;
+    padding: 26px;
+    max-width: 560px;
+    width: 92%;
+    text-align: center;
+    box-shadow: 0 18px 36px rgba(11, 18, 32, 0.06);
+}
+
+.option-btn {
+    background: linear-gradient(135deg, var(--main-dark) 0%, var(--main) 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.option-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.option-btn.wrong {
+    opacity: 0.65;
+    text-decoration: line-through;
+    filter: grayscale(0.3);
+    cursor: not-allowed;
+}
+
+/* ========== MOBILE STYLES ========== */
+
+/* Mobile HUD - slim bar fixed at top */
+.mobile-hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mobile-hud-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    letter-spacing: 0.05em;
+}
+
+.mobile-hud-sep {
+    width: 1px;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.mobile-hud-settings {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.mobile-hud-settings:active {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.mobile-hud-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.mobile-hud-exit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 6px;
+    color: rgba(239, 68, 68, 0.8);
+    background: rgba(239, 68, 68, 0.1);
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.mobile-hud-exit:active {
+    background: rgba(239, 68, 68, 0.25);
+    color: #ef4444;
+}
+
+/* Mobile Controls Overlay */
+.mobile-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 16px 20px;
+    pointer-events: none;
+    z-index: 55;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* ========== VIRTUAL JOYSTICK ========== */
+
+.joystick-base {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    pointer-events: auto;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+}
+
+/* Dark annular ring */
+.joystick-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, transparent 32%, #3a3a3a 33%, #4a4a4a 60%, #3a3a3a 85%, #2e2e2e 100%);
+    box-shadow:
+        inset 0 2px 6px rgba(0, 0, 0, 0.6),
+        inset 0 -1px 3px rgba(255, 255, 255, 0.06),
+        0 4px 14px rgba(0, 0, 0, 0.5),
+        0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Wedge segments — 4 pie slices with gaps */
+.joystick-wedge {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: transparent;
+    border: 1.5px solid rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+.wedge-up {
+    clip-path: polygon(50% 50%, 15% 15%, 85% 15%);
+    background: rgba(255, 255, 255, 0.04);
+    border: none;
+}
+
+.wedge-right {
+    clip-path: polygon(50% 50%, 85% 15%, 85% 85%);
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+}
+
+.wedge-down {
+    clip-path: polygon(50% 50%, 85% 85%, 15% 85%);
+    background: rgba(255, 255, 255, 0.04);
+    border: none;
+}
+
+.wedge-left {
+    clip-path: polygon(50% 50%, 15% 85%, 15% 15%);
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+}
+
+/* Divider lines between wedges */
+.joystick-ring::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+        linear-gradient(45deg, transparent 49.2%, rgba(0, 0, 0, 0.5) 49.2%, rgba(0, 0, 0, 0.5) 50.8%, transparent 50.8%),
+        linear-gradient(-45deg, transparent 49.2%, rgba(0, 0, 0, 0.5) 49.2%, rgba(0, 0, 0, 0.5) 50.8%, transparent 50.8%);
+    pointer-events: none;
+}
+
+/* Direction arrows — CSS triangles on the ring */
+.joystick-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+/* Up arrow */
+.arrow-up {
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 10px solid rgba(255, 255, 255, 0.85);
+}
+
+/* Down arrow */
+.arrow-down {
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 10px solid rgba(255, 255, 255, 0.85);
+}
+
+/* Left arrow */
+.arrow-left {
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-right: 10px solid rgba(255, 255, 255, 0.85);
+}
+
+/* Right arrow */
+.arrow-right {
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 10px solid rgba(255, 255, 255, 0.85);
+}
+
+/* Puck shadow — dark disc under the thumb */
+.joystick-puck-shadow {
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    top: 50%;
+    left: 50%;
+    margin-top: -24px;
+    margin-left: -26px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.15) 60%, transparent 100%);
+    pointer-events: none;
+    will-change: transform;
+}
+
+/* Thumb — the draggable puck */
+.joystick-thumb {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    top: 50%;
+    left: 50%;
+    margin-top: -24px;
+    margin-left: -24px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #c0c0c0 0%, #999 40%, #777 80%, #666 100%);
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.5),
+        0 1px 2px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.35),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    will-change: transform;
+    transition: transform 0.08s ease-out;
+}
+
+/* Thumb highlight spot */
+.joystick-thumb::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    width: 18px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(255, 255, 255, 0.45) 0%, transparent 100%);
+}
+
+/* Fire Button */
+.fire-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border: 3px solid rgba(251, 191, 36, 0.4);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(8px);
+    color: #fbbf24;
+    cursor: pointer;
+    pointer-events: auto;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.15), 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: all 0.1s;
+}
+
+.fire-btn:active {
+    background: rgba(251, 191, 36, 0.4);
+    border-color: rgba(251, 191, 36, 0.7);
+    transform: scale(0.92);
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.35), 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.fire-btn-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    margin-top: 2px;
+    opacity: 0.9;
+}
+
+/* Mobile layout: controlled by .is-mobile class from JS */
+.tank-game-container.is-mobile {
+    padding: 0;
+    height: 100dvh;
+    overflow: hidden;
+    touch-action: none;
+}
+
+.tank-game-container.is-mobile canvas {
+    max-height: calc(100dvh - 45px);
+    max-width: 100vw;
+    margin-top: 45px;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+}
+
+/* Landscape mobile */
+@media (orientation: landscape) {
+    .tank-game-container.is-mobile canvas {
+        max-height: calc(100dvh - 45px);
+        max-width: 100vw;
+    }
+
+    .joystick-base {
+        transform: scale(0.85);
+        transform-origin: bottom left;
+    }
+
+    .tank-game-container.is-mobile .fire-btn {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+/* Portrait mobile */
+@media (orientation: portrait) {
+    .tank-game-container.is-mobile canvas {
+        margin-bottom: 50vh;
+    }
+}
+
+/* Move sonner toasts to top-right on mobile (play page) */
+@media (orientation: portrait) {
+    body.is-mobile-game [data-sonner-toaster] {
+        --offset: 40px !important;
+        right: auto !important;
+        left: 110px !important;
+        top: 70px !important;
+        bottom: auto !important;
+        transform: none !important;
+        align-items: flex-end !important;
+        width: 270px;
+    }
+}
+
+@media (orientation: landscape) {
+    body.is-mobile-game [data-sonner-toaster] {
+        --offset: 40px !important;
+        right: 8px !important;
+        left: auto !important;
+        top: 70px !important;
+        bottom: auto !important;
+        transform: none !important;
+        align-items: flex-end !important;
+    }
+}
+
+/* iPad / large tablet */
+@media (min-width: 1024px) and (orientation: landscape) {
+    .mobile-controls {
+        padding: 48px 50px 48px 30px;
+    }
+
+    .joystick-base {
+        width: 170px;
+        height: 170px;
+        transform: scale(1);
+    }
+
+    .joystick-thumb {
+        width: 56px;
+        height: 56px;
+        margin-top: -28px;
+        margin-left: -28px;
+    }
+
+    .joystick-puck-shadow {
+        width: 60px;
+        height: 60px;
+        margin-top: -28px;
+        margin-left: -30px;
+    }
+
+    .tank-game-container.is-mobile .fire-btn {
+        width: 120px;
+        height: 120px;
+    }
+}
